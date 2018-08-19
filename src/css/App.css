@@ -51,11 +51,22 @@
 
 /* Login & Register CSS*/
 .formContainer {
-    width: 40%;
+    width: 35%;
     margin: 0 auto;
     margin-top: 75px;
 }
 
 .formContainer .title {
     margin-bottom: 25px;
+}
+
+
+/*Forgot & Change Password CSS*/
+
+.password {
+    width: 25%;
+}
+
+.password .title {
+    margin: 0;
 }

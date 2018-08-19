@@ -28,7 +28,6 @@ export default class Register extends Component {
 
         if (response && response.data && response.data.responseType === 'success') {
             this.props.history.push('/login');
-            alert('intru');
         } else {
             //afisam eroare
         }

@@ -50,6 +50,7 @@ export default class Login extends Component {
                     </FormGroup>
                     <FormGroup>
                         <Label>Don't have an account ? Create <Link to={'/register'}>one</Link> right now !</Label>
+                        <Label>Forgot your password ? <Link to={'/forgot-password'}>Reset password</Link></Label>
                     </FormGroup>
                     <Button color="primary" onClick={this._login}>Login</Button>
                 </Form>
