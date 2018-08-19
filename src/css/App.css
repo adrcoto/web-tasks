@@ -53,6 +53,9 @@
 .formContainer {
     width: 40%;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 75px;
 }
 
+.formContainer .title {
+    margin-bottom: 25px;
+}

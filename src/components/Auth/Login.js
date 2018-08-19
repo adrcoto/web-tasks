@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 import '../../css/App.css';
 
@@ -37,6 +38,7 @@ export default class Login extends Component {
 
         return (
             <div className={'formContainer'}>
+                <h3 className={'title'}>Login</h3>
                 <Form>
                     <FormGroup>
                         <Label for="email">Email</Label>
@@ -45,6 +47,9 @@ export default class Login extends Component {
                     <FormGroup>
                         <Label for="password">Password</Label>
                         <Input type={'password'} name={'password'} value={password} onChange={this._onChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Don't have an account ? Create <Link to={'/register'}>one</Link> right now !</Label>
                     </FormGroup>
                     <Button color="primary" onClick={this._login}>Login</Button>
                 </Form>

@@ -10,13 +10,13 @@ export default class Users extends Component {
     state = {
         users: [],
         open: false,
-        del: false,
+        del: false, //used for showing delete modal
         id: false,
         name: '',
         email: '',
         password: '',
         role: '',
-        remove: false,
+        remove: false, //used to know when to delete an user
         shouldRerender: false
     };
 
@@ -42,7 +42,8 @@ export default class Users extends Component {
 
     _toggleDelete = () => {
         this.setState({
-            del: !this.state.del
+            del: !this.state.del,
+            remove: false
         });
     }
 
@@ -71,21 +72,22 @@ export default class Users extends Component {
 
         if (id) {
             res = await axios.patch(process.env.REACT_APP_API_URL + `admin/user/${id}`, data);
-            if (remove) {
-                console.log('intru');
-                res = await axios.delete(process.env.REACT_APP_API_URL + `admin/user/${id}`, data);
-            }
         } else {
             data.password = password;
 
             res = await axios.post(process.env.REACT_APP_API_URL + 'admin/user', data);
         }
 
+        if (remove) {
+            res = await axios.delete(process.env.REACT_APP_API_URL + `admin/user/${id}`, data);
+        }
+
 
         if (res && res.data && res.data.responseType === 'success') {
             this.setState({
                 shouldRerender: true,
-                open: false
+                open: false,
+                del: false
             });
         }
     };
@@ -93,9 +95,6 @@ export default class Users extends Component {
     _del = (user) => {
         this.setState({
             id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role_id,
             remove: true,
             del: true
         });
