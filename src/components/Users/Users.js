@@ -10,11 +10,13 @@ export default class Users extends Component {
     state = {
         users: [],
         open: false,
+        del: false,
         id: false,
         name: '',
         email: '',
         password: '',
         role: '',
+        remove: false,
         shouldRerender: false
     };
 
@@ -38,6 +40,13 @@ export default class Users extends Component {
         });
     };
 
+    _toggleDelete = () => {
+        this.setState({
+            del: !this.state.del
+        });
+    }
+
+
     _onChange = (e) => {
         const {name, value} = e.target;
 
@@ -47,7 +56,8 @@ export default class Users extends Component {
     };
 
     _userAction = async () => {
-        const {name, email, password, role, id} = this.state;
+
+        const {name, email, password, role, id, remove} = this.state;
 
         const data = {
             name, email
@@ -61,11 +71,16 @@ export default class Users extends Component {
 
         if (id) {
             res = await axios.patch(process.env.REACT_APP_API_URL + `admin/user/${id}`, data);
+            if (remove) {
+                console.log('intru');
+                res = await axios.delete(process.env.REACT_APP_API_URL + `admin/user/${id}`, data);
+            }
         } else {
             data.password = password;
 
             res = await axios.post(process.env.REACT_APP_API_URL + 'admin/user', data);
         }
+
 
         if (res && res.data && res.data.responseType === 'success') {
             this.setState({
@@ -74,6 +89,18 @@ export default class Users extends Component {
             });
         }
     };
+
+    _del = (user) => {
+        this.setState({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role_id,
+            remove: true,
+            del: true
+        });
+    }
+
 
     _add = () => {
         this.setState({
@@ -97,7 +124,6 @@ export default class Users extends Component {
 
     render() {
         const {users, id} = this.state;
-
         return (
             <Layout>
                 <Button className={'addButton'} color="primary" onClick={this._add}>Add user</Button>
@@ -151,9 +177,23 @@ export default class Users extends Component {
                         <Button color="secondary" onClick={this._toggle}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
+
+
+                <Modal isOpen={this.state.del} toggle={this._toggleDelete}>
+                    <ModalHeader toggle={this._toggleDelete}>Delete user</ModalHeader>
+                    <ModalBody>
+                        <p>Are you sure want to delete selected user ?</p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="primary" onClick={this._userAction}>Delete</Button>
+                        <Button color="secondary" onClick={this._toggleDelete}>Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+
+
                 <div className={'users-list'}>
                     {users && users.map((user, key) => {
-                        return <UserRow key={key} user={user} edit={this._edit}/>
+                        return <UserRow key={key} user={user} edit={this._edit} del={this._del}/>
                     })}
                 </div>
             </Layout>
