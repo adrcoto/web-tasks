@@ -1,24 +1,29 @@
 import React, {Component} from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
-import Landing from './components/Landing/Landing';
+import Home from './components/Home/Home';
 import Users from './components/Users/Users';
 import Login from './components/Auth/Login';
-import Register from './components/Register/Register';
-import ForgotPassword from './components/Password/ForgotPassword';
-import ChangePassword from './components/Password/ResetPassword';
+import Logout from './components/Auth/Logout';
+import ForgotPassword from "./components/Auth/ForgotPassword";
+import Register from "./components/Auth/Register";
+import {LoggedUser} from "./components/Misc/LoggedUser";
+import Tasks from "./components/Tasks";
+import Groups from "./components/Groups/Groups";
 
 export default class Router extends Component {
     render() {
         return (
             <BrowserRouter>
                 <Switch>
-                    <Route exact path="/" component={Landing}/>
-                    <Route exact path="/register" component={Register}/>
+                    <Route exact path="/" component={LoggedUser(Home)}/>
+                    <Route exact path="/users" component={LoggedUser(Users)}/>
                     <Route exact path="/login" component={Login}/>
-                    <Route exact path="/users" component={Users}/>
                     <Route exact path="/forgot-password" component={ForgotPassword}/>
-                    <Route exact path="/change-password" component={ChangePassword}/>
+                    <Route exact path="/register" component={Register}/>
+                    <Route exact path="/tasks" component={LoggedUser(Tasks)}/>
+                    <Route exact path="/groups" component={LoggedUser(Groups)}/>
+                    <Route exact path="/logout" component={Logout}/>
                 </Switch>
             </BrowserRouter>
         );

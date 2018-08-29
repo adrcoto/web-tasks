@@ -8,6 +8,8 @@ import qs from 'qs';
 
 export default class Layout extends Component {
     render() {
+        const {user} = this.props;
+
         if (!sessionStorage.getItem('token')) {
             return <Redirect to={'/login'}/>
         }
@@ -22,8 +24,8 @@ export default class Layout extends Component {
         axios.defaults.headers.common.Authorization = 'Bearer ' + sessionStorage.getItem('token');
 
         return (
-            <Container className={'layout'}>
-                <Header/>
+            <Container fluid className={'layout'}>
+                <Header user={user}/>
                 <div className={'content'}>
                     {this.props.children}
                 </div>

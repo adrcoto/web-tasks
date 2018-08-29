@@ -4,31 +4,29 @@ import UserRow from "./UserRow";
 import Layout from '../Misc/Layout';
 import '../../css/Users.css';
 
-import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+import {Button, Col, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from 'reactstrap';
 
 export default class Users extends Component {
     state = {
         users: [],
         open: false,
-        del: false, //used for showing delete modal
         id: false,
         name: '',
         email: '',
         password: '',
         role: '',
-        remove: false, //used to know when to delete an user
         shouldRerender: false
     };
 
     async componentDidMount() {
-        let users = await axios.get(process.env.REACT_APP_API_URL + 'admin/users');
+        let users = await axios.get(`${process.env.REACT_APP_API_URL}/admin/users`);
 
         this.setState({users: users.data.data});
     }
 
     async componentDidUpdate() {
         if (this.state.shouldRerender) {
-            let users = await axios.get(process.env.REACT_APP_API_URL + 'admin/users');
+            let users = await axios.get(`${process.env.REACT_APP_API_URL}/admin/users`);
 
             this.setState({users: users.data.data, shouldRerender: false});
         }
@@ -40,14 +38,6 @@ export default class Users extends Component {
         });
     };
 
-    _toggleDelete = () => {
-        this.setState({
-            del: !this.state.del,
-            remove: false
-        });
-    }
-
-
     _onChange = (e) => {
         const {name, value} = e.target;
 
@@ -57,8 +47,7 @@ export default class Users extends Component {
     };
 
     _userAction = async () => {
-
-        const {name, email, password, role, id, remove} = this.state;
+        const {name, email, password, role, id} = this.state;
 
         const data = {
             name, email
@@ -71,35 +60,20 @@ export default class Users extends Component {
         let res;
 
         if (id) {
-            res = await axios.patch(process.env.REACT_APP_API_URL + `admin/user/${id}`, data);
+            res = await axios.patch(`${process.env.REACT_APP_API_URL}/admin/user/${id}`, data);
         } else {
             data.password = password;
 
-            res = await axios.post(process.env.REACT_APP_API_URL + 'admin/user', data);
+            res = await axios.post(`${process.env.REACT_APP_API_URL}/admin/user`, data);
         }
-
-        if (remove) {
-            res = await axios.delete(process.env.REACT_APP_API_URL + `admin/user/${id}`, data);
-        }
-
 
         if (res && res.data && res.data.responseType === 'success') {
             this.setState({
                 shouldRerender: true,
-                open: false,
-                del: false
+                open: false
             });
         }
     };
-
-    _del = (user) => {
-        this.setState({
-            id: user.id,
-            remove: true,
-            del: true
-        });
-    }
-
 
     _add = () => {
         this.setState({
@@ -121,11 +95,24 @@ export default class Users extends Component {
         });
     };
 
+    _delete = async id => {
+        let res = await axios.delete(`${process.env.REACT_APP_API_URL}/admin/user/${id}`);
+
+        if (res && res.data && res.data.responseType === 'success') {
+            this.setState({
+                shouldRerender: true
+            });
+        }
+    };
+
     render() {
+        const {user} = this.props;
         const {users, id} = this.state;
+
         return (
-            <Layout>
-                <Button className={'addButton'} color="primary" onClick={this._add}>Add user</Button>
+            <Layout user={user}>
+                <h1>Users</h1>
+                <Button className={'add-new'} color="primary" onClick={this._add}>Add user</Button>
                 <Modal isOpen={this.state.open} toggle={this._toggle}>
                     <ModalHeader toggle={this._toggle}>{id ? 'Edit user' : 'Add user'}</ModalHeader>
                     <ModalBody>
@@ -176,23 +163,17 @@ export default class Users extends Component {
                         <Button color="secondary" onClick={this._toggle}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
-
-
-                <Modal isOpen={this.state.del} toggle={this._toggleDelete}>
-                    <ModalHeader toggle={this._toggleDelete}>Delete user</ModalHeader>
-                    <ModalBody>
-                        <p>Are you sure want to delete selected user ?</p>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this._userAction}>Delete</Button>
-                        <Button color="secondary" onClick={this._toggleDelete}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
-
-
                 <div className={'users-list'}>
-                    {users && users.map((user, key) => {
-                        return <UserRow key={key} user={user} edit={this._edit} del={this._del}/>
+                    <Row className={'table-header'}>
+                        <Col xs={1}>ID</Col>
+                        <Col xs={3}>Name</Col>
+                        <Col xs={4}>Email</Col>
+                        <Col xs={2}>Role</Col>
+                        <Col xs={2}>Actions</Col>
+                    </Row>
+                    {users.length > 1 && users.map((u, key) => {
+                        return <UserRow key={key} user={u} edit={this._edit} onDelete={this._delete}
+                                        className={`${key % 2 === 0 ? 'odd' : ''}`}/>
                     })}
                 </div>
             </Layout>

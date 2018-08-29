@@ -1,72 +1,65 @@
 .App {
-    text-align: center;
+  text-align: center;
 }
 
 .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 80px;
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
 }
 
 .App-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
 }
 
 .App-title {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 .App-intro {
-    font-size: large;
+  font-size: large;
 }
 
 @keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Header CSS*/
-
-.header .logoutButton {
-    margin: 5px 56px 0 0;
-    float: right;
+.layout {
+  padding: 0 !important;
 }
 
-/* Landing CSS */
-
-.jumbotron {
-    margin-top: 10px;
+.card {
+  width:400px;
+  margin: 5% auto 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
 }
 
-
-.jumbotron .register {
-    margin-left: 15px;
+.menu {
+  background: #007bff;
 }
 
-/* Login & Register CSS*/
-.formContainer {
-    width: 35%;
-    margin: 0 auto;
-    margin-top: 75px;
+.menu-item a {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  padding: 10px 10px;
+  height: 100%;
+}
+.menu-item a:hover, .menu-item a:active, .menu-item a:visited {
+  text-decoration: none;
+  color: white;
+  background: #0069d9;
 }
 
-.formContainer .title {
-    margin-bottom: 25px;
+.add-new {
+  margin: 10px;
 }
 
-
-/*Forgot & Change Password CSS*/
-
-.password {
-    width: 25%;
-}
-
-.password .title {
-    margin: 0;
+.content {
+  padding: 10px;
 }

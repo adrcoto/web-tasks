@@ -1,17 +1,3 @@
 .users-list {
     margin: 10px 0 20px;
 }
-
-.userRow{
-    margin-top: 10px;
-}
-
-.userRow .deleteButton {
-    margin-left: 5px;
-}
-
-.addButton {
-    margin-top: 75px;
-    margin-bottom: 10px;
-}
-
